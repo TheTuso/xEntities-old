@@ -1,83 +1,100 @@
 package pl.tuso.xentities.animation;
 
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.Bukkit;
 import pl.tuso.xentities.XEntities;
+import pl.tuso.xentities.api.Animation;
 import pl.tuso.xentities.type.IntelligentArmorStand;
 
-public class AnimationManager {
+public abstract class AnimationManager implements Animation {
     private final IntelligentArmorStand armorStand;
-    private int frequency;//how often
-    private int per;//frame per tick
-    private boolean stopped = false;
-    //timers currently per animation
-    public AnimationManager(IntelligentArmorStand armorStand, int frequency, int per) {
+    private int frequency;
+    private int frameDuration;
+    private boolean isRunning = false;
+    private int frequencyTimer = 0;
+    private int frameDurationTimer = 0;
+
+    public AnimationManager(IntelligentArmorStand armorStand, int frequency, int frameDuration) {
         this.armorStand = armorStand;
         this.frequency = frequency;
-        this.per = per;
+        this.frameDuration = frameDuration;
     }
 
-    public void animate() {
-        if (armorStand.isRemoved()) {
+    @Override
+    public void play(long delay, long peroid) {
+        if (isRunning) {
+            return;
+        }
+        start();
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(XEntities.getInstance(), () -> animate(), delay, peroid);
+    }
+
+    @Override
+    public void forcePlay(long delay, long peroid) {
+        if (isRunning) {
             stop();
         }
+        start();
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(XEntities.getInstance(), () -> animate(), delay, peroid);
     }
 
-    private BukkitRunnable animation = new BukkitRunnable() {
-        @Override
-        public void run() {
-            animate();
-        }
-    };
-
-    public void run(long delay, long peroid) {
-        this.play();
-        animation.runTaskTimer(XEntities.getInstance(), delay, peroid);
+    @Override
+    public void start() {
+        this.isRunning = true;
     }
 
-    public void play() {
-        stopped = false;
-    }
-
+    @Override
     public void stop() {
-        stopped = true;
+        this.isRunning = false;
+        this.frequencyTimer = 0;
+    }
 
-        int taskIdOrFailed;
-        try {
-            taskIdOrFailed = animation.getTaskId();
-        } catch (Exception e) {
-            taskIdOrFailed = -1;
+    @Override
+    public abstract void frame();
+
+    @Override
+    public void animate() {
+        if (!isRunning()) {
+            return;
         }
-        boolean failed = taskIdOrFailed == -1;
-        if (!failed) {
-            animation.cancel();
+        if (frequencyTimer != frequency) {
+            frequencyTimer++;
+            return;
         }
+        if (frameDurationTimer != frameDuration) {
+            frameDurationTimer++;
+            return;
+        }
+        frameDurationTimer = 0;
+        frame();
     }
 
-    public IntelligentArmorStand getArmorStand() {
-        return armorStand;
+    @Override
+    public boolean isRunning() {
+        return this.isRunning;
     }
 
-    public float interpolate(float pose, float steps) {
-        return pose / steps;
-    }
-
-    public int getFrequency() {
-        return frequency;
-    }
-
+    @Override
     public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 
-    public int getPer() {
-        return per;
+    @Override
+    public int getFrequency() {
+        return this.frequency;
     }
 
-    public void setPer(int per) {
-        this.per = per;
+    @Override
+    public void setFrameDuration(int duration) {
+        this.frameDuration = frameDurationTimer;
     }
 
-    public boolean isStopped() {
-        return stopped;
+    @Override
+    public int getFrameDuration() {
+        return this.frameDuration;
+    }
+
+    @Override
+    public IntelligentArmorStand getArmorStand() {
+        return this.armorStand;
     }
 }

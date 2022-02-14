@@ -1,7 +1,6 @@
 package pl.tuso.xentities.api;
 
 import net.minecraft.core.Rotations;
-import pl.tuso.xentities.type.IntelligentArmorStand;
 
 public interface Intelligent {
     void setDisplacement(float displacement);

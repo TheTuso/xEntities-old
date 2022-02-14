@@ -28,13 +28,15 @@ public interface Hitbox extends SubEntity {
                 if (!player.canSee(this.getEntity().getBukkitEntity())) {
                     player.showEntity(XEntities.getInstance(), this.getEntity().getBukkitEntity());
                 }
-                PacketUtil.sendPackets(player, PacketUtil.teleportWithPackets(
-                        getEntity(),
-                        childLocation.getX(),
-                        childLocation.getY() + y + this.getOwner().getDisplacement(),
-                        childLocation.getZ(),
-                        reference.getYRot(),
-                        reference.getXRot()));
+                if (getOwner().getDisplacement() != 0.0) {
+                    PacketUtil.sendPackets(player, PacketUtil.teleportWithPackets(
+                            getEntity(),
+                            childLocation.getX(),
+                            childLocation.getY() + y + this.getOwner().getDisplacement(),
+                            childLocation.getZ(),
+                            reference.getYRot(),
+                            reference.getXRot()));
+                }
             } else if (player.canSee(this.getEntity().getBukkitEntity())) {
                 player.hideEntity(XEntities.getInstance(), this.getEntity().getBukkitEntity());
             }

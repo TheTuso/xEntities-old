@@ -19,14 +19,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import pl.tuso.xentities.api.Intelligent;
-import pl.tuso.xentities.api.Parent;
 import pl.tuso.xentities.util.PacketUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Optional;
 
-public class IntelligentArmorStand extends PathfinderMob implements Intelligent, Parent {
+public class IntelligentArmorStand extends PathfinderMob implements Intelligent {
     //LivingEntity
     protected static final EntityDataAccessor<Byte> DATA_LIVING_ENTITY_FLAGS = EntityDataSerializers.BYTE.createAccessor(8);
     public static final EntityDataAccessor<Float> DATA_HEALTH_ID = EntityDataSerializers.FLOAT.createAccessor(9);
@@ -67,6 +66,7 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent,
         setMovementSpeed(0.25D);
         setShowArms(true);
         setNoBasePlate(true);
+        setInvisible(true);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0.0F);
@@ -86,22 +86,16 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent,
         super.readAdditionalSaveData(nbttagcompound);
         Bukkit.broadcast(net.kyori.adventure.text.Component.text("load entity!").color(TextColor.color(129, 232, 11)));
     }
-    int timer = 0;
+
     @Override
     @OverridingMethodsMustInvokeSuper
     public void tick() {
         super.tick();
-        positionTick();
         if (displacement != 0.0F) {
             PacketUtil.sendPackets(PacketUtil.teleportWithPackets(this, getX(), getY() + displacement, getZ()));
         }
         if (yRotAsYaw) {
-            timer = 0;
             setYRot(getBukkitYaw());
-        }
-        if (isRemoved()) {
-            removeParts();
-            removeHitboxes();
         }
         animationTick();
     }
@@ -128,7 +122,7 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent,
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
+        //this.goalSelector.addGoal(0, new FloatGoal(this));
     }
     //Property
     @Override
@@ -348,10 +342,5 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent,
     @Nullable
     public SoundEvent getDeathSound() {
         return SoundEvents.ARMOR_STAND_BREAK;
-    }
-    //Part
-    @Override
-    public void positionTick() {
-
     }
 }

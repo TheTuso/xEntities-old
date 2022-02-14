@@ -3,4 +3,3 @@ version: '${version}'
 main: pl.tuso.xentities.XEntities
 api-version: 1.18
 author: tuso
-load: STARTUP

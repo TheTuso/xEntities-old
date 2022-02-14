@@ -4,6 +4,7 @@ import net.minecraft.world.entity.Entity;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import pl.tuso.xentities.type.IntelligentArmorStand;
 import pl.tuso.xentities.util.PacketUtil;
 
 public interface Partial extends SubEntity {
@@ -23,4 +24,7 @@ public interface Partial extends SubEntity {
             PacketUtil.sendPackets(PacketUtil.teleportWithPackets(getEntity(), childLocation.getX(), childLocation.getY() + y + this.getOwner().getDisplacement(), childLocation.getZ()));
         }
     }
+
+    @Override
+    IntelligentArmorStand getEntity();
 }

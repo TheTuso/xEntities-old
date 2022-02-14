@@ -1,8 +1,9 @@
 package pl.tuso.xentities;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.tuso.xentities.listener.EntityEquipmentFixer;
+import pl.tuso.xentities.entity.snail.listeners.SnailListener;
 import pl.tuso.xentities.listener.EntityDamageReciver;
+import pl.tuso.xentities.listener.EntityEquipmentFixer;
 import pl.tuso.xentities.type.FantasticBeast;
 
 public final class XEntities extends JavaPlugin {
@@ -15,6 +16,7 @@ public final class XEntities extends JavaPlugin {
         FantasticBeast.registerTypes();
         getServer().getPluginManager().registerEvents(new EntityEquipmentFixer(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageReciver(), this);
+        getServer().getPluginManager().registerEvents(new SnailListener(), this);
     }
 
     @Override

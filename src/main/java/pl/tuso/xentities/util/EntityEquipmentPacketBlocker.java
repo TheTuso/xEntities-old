@@ -5,7 +5,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
-import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
@@ -45,6 +44,8 @@ public class EntityEquipmentPacketBlocker {
             }
         };
         ChannelPipeline pipeline = ((CraftPlayer) player).getHandle().connection.connection.channel.pipeline();
-        pipeline.addBefore("packet_handler", player.getName(), channelDuplexHandler);
+        if (pipeline.context(player.getName()) == null) {
+            pipeline.addBefore("packet_handler", player.getName(), channelDuplexHandler);
+        }
     }
 }

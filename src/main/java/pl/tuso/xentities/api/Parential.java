@@ -3,14 +3,16 @@ package pl.tuso.xentities.api;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import pl.tuso.xentities.type.IntelligentArmorStand;
 import pl.tuso.xentities.type.Part;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Parent {
+public interface Parential {
     List<Part> parts = new ArrayList<>();
     List<Hitbox> hitboxes = new ArrayList<>();
+    List<Animation> animations = new ArrayList<>();
     //Parts
     default void spawnParts(Level level) {
         for (Part part : parts) {
@@ -31,13 +33,17 @@ public interface Parent {
     default void removePart(@NotNull Part part) {
         part.remove(Entity.RemovalReason.KILLED);
     }
+
+    default List getParts() {
+        return this.parts;
+    }
     //Hitboxes
     default void initHitboxes() {
         for (Hitbox hitbox : hitboxes) {
             hitbox.getEntity().setNoGravity(true);
             hitbox.getEntity().setSilent(true);
-//            hitbox.getEntity().setInvisible(true);
-//            hitbox.getEntity().persistentInvisibility = true;
+            hitbox.getEntity().setInvisible(true);
+            hitbox.getEntity().persistentInvisibility = true;
             hitbox.getEntity().collides = false;
             hitbox.getEntity().persist = false;
         }
@@ -63,5 +69,35 @@ public interface Parent {
         hitbox.getEntity().remove(Entity.RemovalReason.KILLED);
     }
 
-    void positionTick();
+    void positionSubEntityTick();
+
+    default List getHitboxes() {
+        return this.hitboxes;
+    }
+    //Animation
+    default void startAnimations() {
+        for (Animation animation : animations) {
+            this.startAnimation(animation);
+        }
+    }
+
+    default void stopAnimations() {
+        for (Animation animation : animations) {
+            this.stopAnimation(animation);
+        }
+    }
+
+    default void startAnimation(@NotNull Animation animation) {
+        animation.start();
+    }
+
+    default void stopAnimation(@NotNull Animation animation) {
+        animation.stop();
+    }
+
+    default List getAnimations() {
+        return this.animations;
+    }
+
+    IntelligentArmorStand getEntity();
 }

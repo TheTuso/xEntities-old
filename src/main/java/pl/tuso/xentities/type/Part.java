@@ -1,7 +1,6 @@
 package pl.tuso.xentities.type;
 
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import pl.tuso.xentities.api.Partial;
@@ -17,9 +16,10 @@ public class Part extends IntelligentArmorStand implements Partial {
         this.setKnockbackResistance(1.0D);
     }
 
-    public Part(@NotNull IntelligentArmorStand owner, EntityType<? extends Part> entitytypes, Level world) {
+    public Part(@NotNull Parent owner, EntityType<? extends Part> entitytypes, Level world) {
         this(entitytypes, world);
         this.owner = owner;
+        owner.getParts().add(this);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Part extends IntelligentArmorStand implements Partial {
     }
 
     @Override
-    public LivingEntity getEntity() {
+    public IntelligentArmorStand getEntity() {
         return this;
     }
 }
