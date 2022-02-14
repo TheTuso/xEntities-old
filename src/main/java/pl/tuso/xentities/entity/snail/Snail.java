@@ -21,6 +21,8 @@ public class Snail extends Parent {
     private ModelFactory snail_tinted = new ModelFactory(Material.PAPER, 3);
     private ModelFactory snail_shell_tinted = new ModelFactory(Material.PAPER, 4);
 
+    private boolean knocked = false;
+
     public Snail(EntityType<? extends Snail> entitytypes, Level world) {
         super(entitytypes, world);
         this.setCustomName(Component.nullToEmpty("Snail"));
@@ -49,6 +51,14 @@ public class Snail extends Parent {
                 this.setItemSlot(EquipmentSlot.HEAD, new ModelFactory(Material.PAPER, currentModel).getNMSCopy());
             }
         }, 10);
+    }
+
+    public void setKnocked(boolean knocked) {
+        this.knocked = knocked;
+    }
+
+    public boolean isKnocked() {
+        return this.knocked;
     }
 
     @Override
