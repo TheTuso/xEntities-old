@@ -18,11 +18,8 @@ public interface Partial extends SubEntity {
 
         Location childLocation = referenceLocation.clone().subtract(xPos).subtract(zPos);
 
-        getEntity().setPos(childLocation.getX(), childLocation.getY() + y + this.getOwner().getDisplacement(), childLocation.getZ());
-
-        if (this.getOwner().getDisplacement() != 0.0D) {
-            PacketUtil.sendPackets(PacketUtil.teleportWithPackets(getEntity(), childLocation.getX(), childLocation.getY() + y + this.getOwner().getDisplacement(), childLocation.getZ()));
-        }
+        getEntity().setPos(childLocation.getX(), childLocation.getY() + y + this.getOwner().getDisplacementY(), childLocation.getZ());
+        PacketUtil.sendPackets(PacketUtil.teleportWithPackets(getEntity(), childLocation.getX(), childLocation.getY() + y + this.getOwner().getDisplacementY(), childLocation.getZ()));
     }
 
     @Override

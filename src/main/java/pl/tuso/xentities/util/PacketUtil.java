@@ -23,13 +23,13 @@ public class PacketUtil {
         }
     }
 
-    public static ClientboundTeleportEntityPacket teleportWithPackets(Entity entity, double x, double y, double z) {
+    public static @NotNull ClientboundTeleportEntityPacket teleportWithPackets(Entity entity, double x, double y, double z) {
         ClientboundTeleportEntityPacket teleportEntityPacket = new ClientboundTeleportEntityPacket(entity);
         setXYZ(teleportEntityPacket, x, y, z);
         return teleportEntityPacket;
     }
 
-    public static ClientboundTeleportEntityPacket teleportWithPackets(Entity entity, double x, double y, double z, float yRot, float xRot) {
+    public static @NotNull ClientboundTeleportEntityPacket teleportWithPackets(Entity entity, double x, double y, double z, float yRot, float xRot) {
         ClientboundTeleportEntityPacket teleportEntityPacket = new ClientboundTeleportEntityPacket(entity);
         setXYZ(teleportEntityPacket, x, y, z);
         byte byteYRot = (byte)((int)(yRot * 256.0F / 360.0F));

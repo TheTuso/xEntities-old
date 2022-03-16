@@ -1,7 +1,7 @@
 package pl.tuso.xentities;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.tuso.xentities.entity.snail.listeners.SnailListener;
+import pl.tuso.xentities.entity.snail.listener.SnailListener;
 import pl.tuso.xentities.listener.EntityDamageReciver;
 import pl.tuso.xentities.listener.EntityEquipmentFixer;
 import pl.tuso.xentities.type.FantasticBeast;

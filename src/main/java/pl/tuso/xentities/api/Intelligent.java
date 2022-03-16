@@ -3,9 +3,17 @@ package pl.tuso.xentities.api;
 import net.minecraft.core.Rotations;
 
 public interface Intelligent {
-    void setDisplacement(float displacement);
+    void setDisplacementX(float displacementX);
 
-    float getDisplacement();
+    float getDisplacementX();
+
+    void setDisplacementY(float displacementY);
+
+    float getDisplacementY();
+
+    void setDisplacementZ(float displacementZ);
+
+    float getDisplacementZ();
 
     void setSmall(boolean flag);
 

@@ -1,12 +1,8 @@
 package pl.tuso.xentities.util;
 
 import io.netty.channel.*;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.world.entity.Entity;
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +32,6 @@ public class EntityEquipmentPacketBlocker {
             public void write(ChannelHandlerContext channelHandlerContext, Object packet, ChannelPromise channelPromise) throws Exception {
                 if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket){
                     if (equipmentPacket.getEntity() == ID) {
-                        Bukkit.broadcast(Component.text(equipmentPacket.toString()).color(TextColor.color(232, 69, 55)).decorate(TextDecoration.STRIKETHROUGH));
                         return;
                     }
                 }

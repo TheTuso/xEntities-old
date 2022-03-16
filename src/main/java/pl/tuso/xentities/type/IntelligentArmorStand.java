@@ -13,11 +13,13 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.util.Vector;
 import pl.tuso.xentities.api.Intelligent;
 import pl.tuso.xentities.util.PacketUtil;
 
@@ -57,7 +59,9 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
     private Rotations leftLegPose = DEFAULT_LEFT_LEG_POSE;
     private Rotations rightLegPose = DEFAULT_LEFT_LEG_POSE;
 
-    private float displacement = 0.0F;
+    private float displacementX = 0.0F;
+    private float displacementY = 0.0F;
+    private float displacementZ = 0.0F;
     private boolean yRotAsYaw = false;
 
     public IntelligentArmorStand(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
@@ -66,7 +70,6 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
         setMovementSpeed(0.25D);
         setShowArms(true);
         setNoBasePlate(true);
-        setInvisible(true);
 
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0.0F);
@@ -91,9 +94,17 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
     @OverridingMethodsMustInvokeSuper
     public void tick() {
         super.tick();
-        if (displacement != 0.0F) {
-            PacketUtil.sendPackets(PacketUtil.teleportWithPackets(this, getX(), getY() + displacement, getZ()));
-        }
+//        if (displacementX != 0.0F || displacementY != 0.0F || displacementZ != 0.0F) {
+            Location originalLocation = this.getBukkitEntity().getLocation();
+            Vector direction = originalLocation.getDirection();
+            Vector i = new Vector(0, 1, 0);
+
+            Vector xPos = i.clone().crossProduct(direction).multiply(displacementX);
+            Vector zPos = direction.clone().multiply(displacementZ);
+            Location fakeLocation = originalLocation.clone().subtract(xPos).subtract(zPos);
+
+            PacketUtil.sendPackets(PacketUtil.teleportWithPackets(this, fakeLocation.getX(), fakeLocation.getY() + displacementY, fakeLocation.getZ()));
+//        }
         if (yRotAsYaw) {
             setYRot(getBukkitYaw());
         }
@@ -131,19 +142,39 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
     }
 
     @Override
-    public void setDisplacement(float displacement) {
-        this.displacement = displacement;
-    }
-
-    @Override
-    public float getDisplacement() {
-        return this.displacement;
-    }
-
-    @Override
     public void setInvisible(boolean flag) {
         super.setInvisible(flag);
         this.persistentInvisibility = flag;
+    }
+
+    @Override
+    public void setDisplacementX(float displacementX) {
+        this.displacementX = displacementX;
+    }
+
+    @Override
+    public float getDisplacementX() {
+        return this.displacementX;
+    }
+
+    @Override
+    public void setDisplacementY(float displacementY) {
+        this.displacementY = displacementY;
+    }
+
+    @Override
+    public float getDisplacementY() {
+        return this.displacementY;
+    }
+
+    @Override
+    public void setDisplacementZ(float displacementZ) {
+        this.displacementZ = displacementZ;
+    }
+
+    @Override
+    public float getDisplacementZ() {
+        return this.displacementZ;
     }
 
     @Override

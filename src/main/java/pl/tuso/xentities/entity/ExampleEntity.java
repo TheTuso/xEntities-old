@@ -30,7 +30,7 @@ public class ExampleEntity extends Parent {
     public ExampleEntity(EntityType<? extends ExampleEntity> entitytypes, Level world) {
         super(entitytypes, world);
         this.setYRotAsYaw(true);
-        this.setDisplacement(-0.5F);
+        this.setDisplacementY(-0.5F);
 
         part1 = new Part(this, FantasticBeast.PART, world) {
             @Override

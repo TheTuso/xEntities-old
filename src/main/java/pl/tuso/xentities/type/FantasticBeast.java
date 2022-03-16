@@ -2,7 +2,6 @@ package pl.tuso.xentities.type;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Lifecycle;
-import net.kyori.adventure.text.Component;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -11,9 +10,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import pl.tuso.xentities.entity.ExampleEntity;
+import pl.tuso.xentities.entity.TestEntity;
+import pl.tuso.xentities.entity.human.Human;
 import pl.tuso.xentities.entity.snail.Snail;
 import pl.tuso.xentities.util.ReflectionUtil;
 
@@ -26,14 +26,20 @@ public class FantasticBeast {
     public static EntityType<Part> PART;
 
     public static EntityType<ExampleEntity> EXAMPLE;
+    public static EntityType<TestEntity> TEST;
+
     public static EntityType<Snail> SNAIL;
+    public static EntityType<Snail> HUMAN;
 
     public static void registerTypes() {
         INTELLIGENT_ARMOR_STAND = registerEntity(IntelligentArmorStand::new, "intelligent_armor_stand", EntityType.ARMOR_STAND, EntityType.ARMOR_STAND.getWidth(), EntityType.ARMOR_STAND.getHeight());
         PART = registerEntity(Part::new, "part", EntityType.ARMOR_STAND, 0.0F, 0.0F);
 
         EXAMPLE = registerEntity(ExampleEntity::new, "example", EntityType.ARMOR_STAND, EntityType.ARMOR_STAND.getWidth(), EntityType.ARMOR_STAND.getHeight());
+        TEST = registerEntity(TestEntity::new, "test", EntityType.ARMOR_STAND, EntityType.ARMOR_STAND.getWidth(), EntityType.ARMOR_STAND.getHeight());
+
         SNAIL = registerEntity(Snail::new, "snail", EntityType.ARMOR_STAND, 0.5F, 0.5F);
+        HUMAN = registerEntity(Human::new, "human", EntityType.ARMOR_STAND, EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight());
     }
 
     private static @NotNull EntityType registerEntity(EntityType.EntityFactory entityFactory, String name, EntityType<?> model, float width, float height) {
