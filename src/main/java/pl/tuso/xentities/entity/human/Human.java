@@ -1,6 +1,5 @@
 package pl.tuso.xentities.entity.human;
 
-import net.kyori.adventure.text.Component;
 import net.minecraft.core.Rotations;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -8,9 +7,6 @@ import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
-import org.bukkit.util.Vector;
 import pl.tuso.xentities.entity.human.animation.ArmsAnimation;
 import pl.tuso.xentities.model.ModelFactory;
 import pl.tuso.xentities.type.FantasticBeast;
@@ -28,7 +24,7 @@ public class Human extends Parent {
 
     private Part body;
 
-    private ArmsAnimation armsAnimation = new ArmsAnimation(this, 0, 0);
+    private ArmsAnimation armsAnimation = new ArmsAnimation(this, 0, 1);
 
     public Human(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
         super(entitytypes, world);
@@ -47,6 +43,9 @@ public class Human extends Parent {
         this.spawnParts(world);
 
         armsAnimation.start();
+
+        this.setRightArmPose(new Rotations(0.0F, 0.0F, 5.5F));
+        this.setLeftArmPose(new Rotations(0.0F, 0.0F, -5.5F));
     }
 
     @Override
@@ -77,7 +76,7 @@ public class Human extends Parent {
                 } else if (yaw < 360.0D) {
                     this.setHeadPose(new Rotations((float) pitch, this.getYRot() + 45.0F, 0.0F));
                 }
-                Bukkit.broadcast(Component.text(yaw));
+//                Bukkit.broadcast(Component.text(yaw));
             } else {
                 this.setHeadPose(new Rotations(0.0F, 0.0F, 0.0F));
             }
