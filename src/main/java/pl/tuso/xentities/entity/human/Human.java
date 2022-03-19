@@ -1,6 +1,7 @@
 package pl.tuso.xentities.entity.human;
 
 import net.minecraft.core.Rotations;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.Level;
@@ -28,6 +29,7 @@ public class Human extends Parent {
 
     public Human(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
         super(entitytypes, world);
+        this.setCustomName(Component.nullToEmpty("Human"));
         this.setInvisible(true);
         this.setItemSlot(EquipmentSlot.HEAD, HEAD.getNMSCopy());
         this.setItemSlot(EquipmentSlot.MAINHAND, RIGHT_ARM.getNMSCopy());
@@ -54,29 +56,40 @@ public class Human extends Parent {
         Bukkit.getOnlinePlayers().forEach(player -> {
             //TODO fix (currently only works on south)
             if (player.getLocation().distanceSquared(this.getBukkitEntity().getLocation()) < getFollowRange()) {
-                Location fromLocation = this.getBukkitEntity().getLocation();
-                Location toLocation = player.getLocation();
-
-                double xDiff = toLocation.getX() - fromLocation.getX();
-                double yDiff = toLocation.getY() - fromLocation.getY();
-                double zDiff = toLocation.getZ() - fromLocation.getZ();
-                double distanceXZ = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
-                double distanceY = Math.sqrt(distanceXZ * distanceXZ + yDiff * yDiff);
-                double yaw = Math.toDegrees(Math.acos(xDiff / distanceXZ)) - 90.0D;
-                double pitch = Math.toDegrees(Math.acos(yDiff / distanceY)) - 90.0D;
-
-                if (zDiff < 0.0D) {
-                    yaw += Math.abs(180.0D - yaw) * 2.0D;
+                Location humanLocation = this.getBukkitEntity().getLocation();
+                Location playerLocation = player.getLocation();
+                if (player.isSneaking()) {
+                    playerLocation.setY(playerLocation.getY() - 0.5F);
                 }
+                humanLocation.setDirection(playerLocation.subtract(humanLocation).toVector());
+                float yaw = humanLocation.getYaw() - this.getYRot();
+                float pitch = humanLocation.getPitch();
 
-                if (yaw < this.getYRot() + 45.0F && yaw > this.getYRot() - 45.0D) {
-                    this.setHeadPose(new Rotations((float) pitch, (float) yaw, 0.0F));
-                } else if (yaw > 360.0D || yaw < 0.0D) {
-                    this.setHeadPose(new Rotations((float) pitch, this.getYRot() - 45.0F, 0.0F));
-                } else if (yaw < 360.0D) {
-                    this.setHeadPose(new Rotations((float) pitch, this.getYRot() + 45.0F, 0.0F));
+                Bukkit.broadcast(net.kyori.adventure.text.Component.text("before " + yaw));
+                while (yaw < 0.0F || yaw > 360.0F) {
+                    if (yaw > 360.0F) {
+                        yaw -= 360.0F;
+                    } else if (yaw < 0.0F) {
+                        yaw += 360.0F;
+                    }
                 }
-//                Bukkit.broadcast(Component.text(yaw));
+                Bukkit.broadcast(net.kyori.adventure.text.Component.text("after " + yaw));
+
+                if (yaw < 45.0F || yaw > 360.0F - 45.0D) {
+                    this.setHeadPose(new Rotations(pitch, yaw, 0.0F));
+                }
+                if (yaw > 45.0F && yaw < 180.0F) {
+                    this.setYRot(this.getYRot() + 15.0F);
+                    this.setHeadPose(new Rotations(pitch, 45.0F, 0.0F));
+                } else if (yaw < 360.0F - 45.0F && yaw > 180.0F) {
+                    this.setYRot(this.getYRot() - 15.0F);
+                    this.setHeadPose(new Rotations(pitch, 360.0F - 45.0F, 0.0F));
+                }
+//                } else if (yaw > this.getYRot() + 45.0F && yaw < 180.0F) {
+//                    this.setHeadPose(new Rotations(pitch, this.getYRot() + 45.0F, 0.0F));
+//                } else if (yaw < this.getYRot() - 45.0F && yaw > 180.0F) {
+//                    this.setHeadPose(new Rotations(pitch, this.getYRot() - 45.0F, 0.0F));
+//                }
             } else {
                 this.setHeadPose(new Rotations(0.0F, 0.0F, 0.0F));
             }
