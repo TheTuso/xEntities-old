@@ -1,103 +1,47 @@
 package pl.tuso.xentities.api;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import pl.tuso.xentities.type.IntelligentArmorStand;
 import pl.tuso.xentities.type.Part;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface Parential {
-    List<Part> parts = new ArrayList<>();
-    List<Hitbox> hitboxes = new ArrayList<>();
-    List<Animation> animations = new ArrayList<>();
     //Parts
-    default void spawnParts(Level level) {
-        for (Part part : parts) {
-            this.spawnPart(level, part);
-        }
-    }
+    void spawnParts(Level level);
 
-    default void spawnPart(@NotNull Level level, Part part) {
-        level.addFreshEntity(part);
-    }
+    void spawnPart(@NotNull Level level, Part part);
 
-    default void removeParts() {
-        for (Part part : parts) {
-            this.removePart(part);
-        }
-    }
+    void removeParts();
 
-    default void removePart(@NotNull Part part) {
-        part.remove(Entity.RemovalReason.KILLED);
-    }
+    void removePart(@NotNull Part part);
 
-    default List getParts() {
-        return this.parts;
-    }
+    List getParts();
     //Hitboxes
-    default void initHitboxes() {
-        for (Hitbox hitbox : hitboxes) {
-            hitbox.getEntity().setNoGravity(true);
-            hitbox.getEntity().setSilent(true);
-            hitbox.getEntity().setInvisible(true);
-            hitbox.getEntity().persistentInvisibility = true;
-            hitbox.getEntity().collides = false;
-            hitbox.getEntity().persist = false;
-        }
-    }
+    void initHitboxes();
 
-    default void addHitboxes(Level level) {
-        for (Hitbox hitbox : hitboxes) {
-            this.addHitbox(level, hitbox);
-        }
-    }
+    void addHitboxes(Level level);
 
-    default void addHitbox(@NotNull Level level, @NotNull Hitbox hitbox) {
-        level.addFreshEntity(hitbox.getEntity());
-    }
+    void addHitbox(@NotNull Level level, @NotNull Hitbox hitbox);
 
-    default void removeHitboxes() {
-        for (Hitbox hitbox : hitboxes) {
-            this.removeHitbox(hitbox);
-        }
-    }
+    void removeHitboxes();
 
-    default void removeHitbox(@NotNull Hitbox hitbox) {
-        hitbox.getEntity().remove(Entity.RemovalReason.KILLED);
-    }
+    void removeHitbox(@NotNull Hitbox hitbox);
+
+    List getHitboxes();
 
     void positionSubEntityTick();
-
-    default List getHitboxes() {
-        return this.hitboxes;
-    }
     //Animation
-    default void startAnimations() {
-        for (Animation animation : animations) {
-            this.startAnimation(animation);
-        }
-    }
+    void startAnimations();
 
-    default void stopAnimations() {
-        for (Animation animation : animations) {
-            this.stopAnimation(animation);
-        }
-    }
+    void stopAnimations();
 
-    default void startAnimation(@NotNull Animation animation) {
-        animation.start();
-    }
+    void startAnimation(@NotNull Animation animation);
 
-    default void stopAnimation(@NotNull Animation animation) {
-        animation.stop();
-    }
+    void stopAnimation(@NotNull Animation animation);
 
-    default List getAnimations() {
-        return this.animations;
-    }
+    List getAnimations();
 
     IntelligentArmorStand getEntity();
 }

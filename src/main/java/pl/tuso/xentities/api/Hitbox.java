@@ -19,7 +19,7 @@ public interface Hitbox extends SubEntity {
 
         Location childLocation = referenceLocation.clone().subtract(xPos).subtract(zPos);
 
-        getEntity().setPos(childLocation.getX(), childLocation.getY() + y + this.getOwner().getDisplacementY(), childLocation.getZ());
+        getEntity().setPos(childLocation.getX(), childLocation.getY() + y, childLocation.getZ());
         getEntity().setYRot(reference.getYRot());
         getEntity().setXRot(reference.getXRot());
 
@@ -28,15 +28,13 @@ public interface Hitbox extends SubEntity {
                 if (!player.canSee(this.getEntity().getBukkitEntity())) {
                     player.showEntity(XEntities.getInstance(), this.getEntity().getBukkitEntity());
                 }
-                if (getOwner().getDisplacementY() != 0.0) {
-                    PacketUtil.sendPackets(player, PacketUtil.teleportWithPackets(
-                            getEntity(),
-                            childLocation.getX(),
-                            childLocation.getY() + y + this.getOwner().getDisplacementY(),
-                            childLocation.getZ(),
-                            reference.getYRot(),
-                            reference.getXRot()));
-                }
+                PacketUtil.sendPackets(player, PacketUtil.teleportWithPackets(
+                        getEntity(),
+                        childLocation.getX(),
+                        childLocation.getY() + y,
+                        childLocation.getZ(),
+                        reference.getYRot(),
+                        reference.getXRot()));
             } else if (player.canSee(this.getEntity().getBukkitEntity())) {
                 player.hideEntity(XEntities.getInstance(), this.getEntity().getBukkitEntity());
             }

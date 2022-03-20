@@ -53,11 +53,14 @@ public abstract class AnimationManager implements Animation {
 
     @Override
     public void animate() {
-        if (!isRunning()) {
-            return;
-        }
         if (frequencyTimer != frequency) {
             frequencyTimer++;
+            this.isRunning = false;
+            return;
+        } else {
+            this.isRunning = true;
+        }
+        if (!isRunning()) {
             return;
         }
         if (frameDurationTimer != frameDuration) {

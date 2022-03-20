@@ -40,7 +40,9 @@ public class ExampleEntity extends Parent {
                 this.goalSelector.addGoal(2, new RandomLookAroundGoal(this));
             }
         };
+        part1.setDisplacementY(-0.5F);
         part2 = new Part(this, FantasticBeast.PART, world);
+        part2.setDisplacementY(-0.5F);
         hitbox = new MainHitbox(this, world);
 
         this.getAnimations().add(0, animation);

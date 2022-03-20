@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import pl.tuso.xentities.entity.human.animation.ArmsAnimation;
+import pl.tuso.xentities.entity.human.animation.WaveAnimation;
 import pl.tuso.xentities.model.ModelFactory;
 import pl.tuso.xentities.type.FantasticBeast;
 import pl.tuso.xentities.type.IntelligentArmorStand;
@@ -23,9 +24,10 @@ public class Human extends Parent {
     private final ModelFactory LEFT_LEG = new ModelFactory(Material.PAPER, 10);
     private final ModelFactory RIGHT_LEG = new ModelFactory(Material.PAPER, 10);
 
-    private Part body;
+    public Part body;
 
     private ArmsAnimation armsAnimation = new ArmsAnimation(this, 0, 1);
+    public WaveAnimation waveAnimation = new WaveAnimation(this, 20 * 5, 0);
 
     public Human(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
         super(entitytypes, world);
@@ -34,7 +36,6 @@ public class Human extends Parent {
         this.setItemSlot(EquipmentSlot.HEAD, HEAD.getNMSCopy());
         this.setItemSlot(EquipmentSlot.MAINHAND, RIGHT_ARM.getNMSCopy());
         this.setItemSlot(EquipmentSlot.OFFHAND, LEFT_ARM.getNMSCopy());
-        this.setDisplacementY(-0.05F);
 
         body = new Part(this, FantasticBeast.PART, world);
         body.setInvisible(true);
@@ -45,6 +46,7 @@ public class Human extends Parent {
         this.spawnParts(world);
 
         armsAnimation.start();
+        waveAnimation.start();
 
         this.setRightArmPose(new Rotations(0.0F, 0.0F, 5.5F));
         this.setLeftArmPose(new Rotations(0.0F, 0.0F, -5.5F));
@@ -54,7 +56,7 @@ public class Human extends Parent {
     public void tick() {
         super.tick();
         Bukkit.getOnlinePlayers().forEach(player -> {
-            //TODO fix (currently only works on south)
+            //TODO not rotation mode
             if (player.getLocation().distanceSquared(this.getBukkitEntity().getLocation()) < getFollowRange()) {
                 Location humanLocation = this.getBukkitEntity().getLocation();
                 Location playerLocation = player.getLocation();
@@ -65,7 +67,6 @@ public class Human extends Parent {
                 float yaw = humanLocation.getYaw() - this.getYRot();
                 float pitch = humanLocation.getPitch();
 
-                Bukkit.broadcast(net.kyori.adventure.text.Component.text("before " + yaw));
                 while (yaw < 0.0F || yaw > 360.0F) {
                     if (yaw > 360.0F) {
                         yaw -= 360.0F;
@@ -73,25 +74,19 @@ public class Human extends Parent {
                         yaw += 360.0F;
                     }
                 }
-                Bukkit.broadcast(net.kyori.adventure.text.Component.text("after " + yaw));
 
                 if (yaw < 45.0F || yaw > 360.0F - 45.0D) {
-                    this.setHeadPose(new Rotations(pitch, yaw, 0.0F));
+                    this.setHeadPose(new Rotations(pitch, yaw, this.getHeadPose().getZ()));
                 }
                 if (yaw > 45.0F && yaw < 180.0F) {
                     this.setYRot(this.getYRot() + 15.0F);
-                    this.setHeadPose(new Rotations(pitch, 45.0F, 0.0F));
+                    this.setHeadPose(new Rotations(pitch, 45.0F, this.getHeadPose().getZ()));
                 } else if (yaw < 360.0F - 45.0F && yaw > 180.0F) {
                     this.setYRot(this.getYRot() - 15.0F);
-                    this.setHeadPose(new Rotations(pitch, 360.0F - 45.0F, 0.0F));
+                    this.setHeadPose(new Rotations(pitch, 360.0F - 45.0F, this.getHeadPose().getZ()));
                 }
-//                } else if (yaw > this.getYRot() + 45.0F && yaw < 180.0F) {
-//                    this.setHeadPose(new Rotations(pitch, this.getYRot() + 45.0F, 0.0F));
-//                } else if (yaw < this.getYRot() - 45.0F && yaw > 180.0F) {
-//                    this.setHeadPose(new Rotations(pitch, this.getYRot() - 45.0F, 0.0F));
-//                }
             } else {
-                this.setHeadPose(new Rotations(0.0F, 0.0F, 0.0F));
+                this.setHeadPose(new Rotations(0.0F, 0.0F, this.getHeadPose().getZ()));
             }
         });
     }
@@ -99,6 +94,7 @@ public class Human extends Parent {
     @Override
     public void animationTick() {
         armsAnimation.animate();
+        waveAnimation.animate();
     }
 
     @Override

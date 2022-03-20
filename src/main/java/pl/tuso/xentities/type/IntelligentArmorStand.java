@@ -13,7 +13,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,6 +20,7 @@ import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.util.Vector;
 import pl.tuso.xentities.api.Intelligent;
+import pl.tuso.xentities.util.RotDirectionUtil;
 import pl.tuso.xentities.util.PacketUtil;
 
 import javax.annotation.Nullable;
@@ -94,9 +94,8 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
     @OverridingMethodsMustInvokeSuper
     public void tick() {
         super.tick();
-//        if (displacementX != 0.0F || displacementY != 0.0F || displacementZ != 0.0F) {
             Location originalLocation = this.getBukkitEntity().getLocation();
-            Vector direction = originalLocation.getDirection();
+            Vector direction = RotDirectionUtil.toDirection(this.getYRot(), this.getXRot());
             Vector i = new Vector(0, 1, 0);
 
             Vector xPos = i.clone().crossProduct(direction).multiply(displacementX);
@@ -104,7 +103,6 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
             Location fakeLocation = originalLocation.clone().subtract(xPos).subtract(zPos);
 
             PacketUtil.sendPackets(PacketUtil.teleportWithPackets(this, fakeLocation.getX(), fakeLocation.getY() + displacementY, fakeLocation.getZ()));
-//        }
         if (yRotAsYaw) {
             setYRot(getBukkitYaw());
         }
@@ -133,7 +131,7 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
 
     @Override
     protected void registerGoals() {
-        //this.goalSelector.addGoal(0, new FloatGoal(this));
+
     }
     //Property
     @Override
