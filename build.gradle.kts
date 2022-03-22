@@ -1,26 +1,23 @@
-import java.text.SimpleDateFormat
-import java.util.Date
-
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.3.3"
+    id("io.papermc.paperweight.userdev") version "1.3.5"
     id("xyz.jpenilla.run-paper") version "1.0.6"
 }
 
 group = "pl.tuso"
-version = SimpleDateFormat("yyyy-MM-dd HH.mm").format(Date())
+version = "1.0"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 dependencies {
-    paperDevBundle("1.18.1-R0.1-SNAPSHOT")
+    paperDevBundle("1.18.2-R0.1-SNAPSHOT")
 }
 
 tasks {
     runServer {
-        minecraftVersion("1.18.1")
+        minecraftVersion("1.18.2")
     }
     assemble {
         dependsOn(reobfJar)

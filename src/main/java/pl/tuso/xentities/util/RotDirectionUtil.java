@@ -1,9 +1,10 @@
 package pl.tuso.xentities.util;
 
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 public class RotDirectionUtil {
-    public static Vector toDirection(double yRot, double xRot) {
+    public static @NotNull Vector toDirection(double yRot, double xRot) {
         Vector vector = new Vector();
 
         double rotX = yRot;

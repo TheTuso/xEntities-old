@@ -2,6 +2,8 @@ package pl.tuso.xentities.type;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Lifecycle;
+import net.minecraft.core.Holder;
+import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +21,7 @@ import pl.tuso.xentities.util.ReflectionUtil;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 public class FantasticBeast {
@@ -43,11 +46,12 @@ public class FantasticBeast {
     }
 
     private static @NotNull EntityType registerEntity(EntityType.EntityFactory entityFactory, String name, EntityType<?> model, float width, float height) {
+        unfreezeRegistry();
         EntityType intelligentType = Registry.ENTITY_TYPE.registerMapping(Registry.ENTITY_TYPE.getId(model),
                 ResourceKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("minecraft", name)),
                 new EntityType<>(entityFactory, model.getCategory(), true, model.canSerialize(), model.canSummon(),
                         model.fireImmune(), ImmutableSet.of(), EntityDimensions.scalable(width, height),
-                        model.clientTrackingRange(), model.updateInterval()), Lifecycle.stable());
+                        model.clientTrackingRange(), model.updateInterval()), Lifecycle.stable()).value();
         setDefaultAttributes(intelligentType);
         return intelligentType;
     }
@@ -61,6 +65,21 @@ public class FantasticBeast {
             ReflectionUtil.setField(suppliers, null, attributeSupplierMap);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void unfreezeRegistry() {
+        Class<MappedRegistry> registryClass = MappedRegistry.class;
+        try {
+            Field intrusiveHolderCache = registryClass.getDeclaredField("bN");
+            intrusiveHolderCache.setAccessible(true);
+            intrusiveHolderCache.set(Registry.ENTITY_TYPE, new IdentityHashMap<EntityType<?>, Holder.Reference<EntityType<?>>>());
+            Field frozen = registryClass.getDeclaredField("bL");
+            frozen.setAccessible(true);
+            frozen.set(Registry.ENTITY_TYPE, false);
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+            return;
         }
     }
 }

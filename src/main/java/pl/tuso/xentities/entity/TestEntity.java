@@ -1,9 +1,6 @@
 package pl.tuso.xentities.entity;
 
 import net.kyori.adventure.text.format.TextColor;
-import net.md_5.bungee.api.ChatColor;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;

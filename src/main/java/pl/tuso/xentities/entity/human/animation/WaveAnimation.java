@@ -7,7 +7,6 @@ import pl.tuso.xentities.type.IntelligentArmorStand;
 
 public class WaveAnimation extends AnimationManager {
     private float waveArea = 16.0F;
-    private Rotations startPose = new Rotations(0.0F, 0.0F, 5.5F);
     private boolean isWaving = false;
     private int waves = 3;
     float step = this.lerp(160.0F + waveArea, 32.0F);

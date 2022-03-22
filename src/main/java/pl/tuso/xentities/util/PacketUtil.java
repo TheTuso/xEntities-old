@@ -4,7 +4,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,13 +25,27 @@ public class PacketUtil {
 
     public static @NotNull ClientboundTeleportEntityPacket teleportWithPackets(Entity entity, double x, double y, double z) {
         ClientboundTeleportEntityPacket teleportEntityPacket = new ClientboundTeleportEntityPacket(entity);
-        setXYZ(teleportEntityPacket, x, y, z);
+        try {
+            final Field xField = teleportEntityPacket.getClass().getDeclaredField("b");
+            final Field yField = teleportEntityPacket.getClass().getDeclaredField("c");
+            final Field zField = teleportEntityPacket.getClass().getDeclaredField("d");
+            xField.setAccessible(true);
+            yField.setAccessible(true);
+            zField.setAccessible(true);
+            xField.setDouble(teleportEntityPacket, x);
+            yField.setDouble(teleportEntityPacket, y);
+            zField.setDouble(teleportEntityPacket, z);
+            xField.setAccessible(false);
+            yField.setAccessible(false);
+            zField.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         return teleportEntityPacket;
     }
 
     public static @NotNull ClientboundTeleportEntityPacket teleportWithPackets(Entity entity, double x, double y, double z, float yRot, float xRot) {
-        ClientboundTeleportEntityPacket teleportEntityPacket = new ClientboundTeleportEntityPacket(entity);
-        setXYZ(teleportEntityPacket, x, y, z);
+        ClientboundTeleportEntityPacket teleportEntityPacket = teleportWithPackets(entity, x, y, z);
         byte byteYRot = (byte)((int)(yRot * 256.0F / 360.0F));
         byte byteXRot = (byte)((int)(xRot * 256.0F / 360.0F));
         try {
@@ -47,24 +61,5 @@ public class PacketUtil {
             e.printStackTrace();
         }
         return teleportEntityPacket;
-    }
-
-    private static void setXYZ(@NotNull ClientboundTeleportEntityPacket packet, double x, double y, double z) {
-        try {
-            final Field xField = packet.getClass().getDeclaredField("b");
-            final Field yField = packet.getClass().getDeclaredField("c");
-            final Field zField = packet.getClass().getDeclaredField("d");
-            xField.setAccessible(true);
-            yField.setAccessible(true);
-            zField.setAccessible(true);
-            xField.setDouble(packet, x);
-            yField.setDouble(packet, y);
-            zField.setDouble(packet, z);
-            xField.setAccessible(false);
-            yField.setAccessible(false);
-            zField.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 }

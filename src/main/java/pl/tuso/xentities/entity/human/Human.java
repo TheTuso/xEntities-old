@@ -26,8 +26,8 @@ public class Human extends Parent {
 
     public Part body;
 
-    private ArmsAnimation armsAnimation = new ArmsAnimation(this, 0, 1);
-    public WaveAnimation waveAnimation = new WaveAnimation(this, 20 * 5, 0);
+    private final ArmsAnimation armsAnimation = new ArmsAnimation(this, 0, 1);
+    public final WaveAnimation waveAnimation = new WaveAnimation(this, 20 * 5, 0);
 
     public Human(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
         super(entitytypes, world);
@@ -56,7 +56,6 @@ public class Human extends Parent {
     public void tick() {
         super.tick();
         Bukkit.getOnlinePlayers().forEach(player -> {
-            //TODO not rotation mode
             if (player.getLocation().distanceSquared(this.getBukkitEntity().getLocation()) < getFollowRange()) {
                 Location humanLocation = this.getBukkitEntity().getLocation();
                 Location playerLocation = player.getLocation();

@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Parent extends IntelligentArmorStand implements Parential {
-    List<Part> parts = new ArrayList<>();
-    List<Hitbox> hitboxes = new ArrayList<>();
-    List<Animation> animations = new ArrayList<>();
+    private final List<Part> parts = new ArrayList<>();
+    private final List<Hitbox> hitboxes = new ArrayList<>();
+    private final List<Animation> animations = new ArrayList<>();
+
     public Parent(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
         super(entitytypes, world);
     }
