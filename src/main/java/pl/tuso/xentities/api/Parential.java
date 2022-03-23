@@ -32,16 +32,6 @@ public interface Parential {
     List getHitboxes();
 
     void positionSubEntityTick();
-    //Animation
-    void startAnimations();
-
-    void stopAnimations();
-
-    void startAnimation(@NotNull Animation animation);
-
-    void stopAnimation(@NotNull Animation animation);
-
-    List getAnimations();
 
     IntelligentArmorStand getEntity();
 }

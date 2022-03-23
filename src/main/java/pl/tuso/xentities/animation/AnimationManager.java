@@ -53,6 +53,10 @@ public abstract class AnimationManager implements Animation {
 
     @Override
     public void animate() {
+        if (this.armorStand.isRemoved()) {
+            this.stop();
+            return;
+        }
         if (frequencyTimer != frequency) {
             frequencyTimer++;
             this.isRunning = false;

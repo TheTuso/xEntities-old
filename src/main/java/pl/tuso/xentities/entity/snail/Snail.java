@@ -1,8 +1,8 @@
 package pl.tuso.xentities.entity.snail;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minecraft.core.Rotations;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -34,7 +34,7 @@ public class Snail extends Parent {
 
     public Snail(EntityType<? extends Snail> entitytypes, Level world) {
         super(entitytypes, world);
-        this.setCustomName(Component.nullToEmpty("Snail"));
+        this.getBukkitEntity().customName(Component.text("Snail"));
         this.setDisplacementY(-1.25F);
         this.setMovementSpeed(0.1D);
         this.setMaxBaseHealth(4.0D);

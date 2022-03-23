@@ -35,9 +35,6 @@ public class PacketUtil {
             xField.setDouble(teleportEntityPacket, x);
             yField.setDouble(teleportEntityPacket, y);
             zField.setDouble(teleportEntityPacket, z);
-            xField.setAccessible(false);
-            yField.setAccessible(false);
-            zField.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -46,8 +43,8 @@ public class PacketUtil {
 
     public static @NotNull ClientboundTeleportEntityPacket teleportWithPackets(Entity entity, double x, double y, double z, float yRot, float xRot) {
         ClientboundTeleportEntityPacket teleportEntityPacket = teleportWithPackets(entity, x, y, z);
-        byte byteYRot = (byte)((int)(yRot * 256.0F / 360.0F));
-        byte byteXRot = (byte)((int)(xRot * 256.0F / 360.0F));
+        byte byteYRot = (byte) ((int) (yRot * 256.0F / 360.0F));
+        byte byteXRot = (byte) ((int) (xRot * 256.0F / 360.0F));
         try {
             final Field yRotField = teleportEntityPacket.getClass().getDeclaredField("e");
             final Field xRotField = teleportEntityPacket.getClass().getDeclaredField("f");
@@ -55,8 +52,6 @@ public class PacketUtil {
             xRotField.setAccessible(true);
             yRotField.setByte(teleportEntityPacket, byteYRot);
             xRotField.setByte(teleportEntityPacket, byteXRot);
-            yRotField.setAccessible(false);
-            xRotField.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }

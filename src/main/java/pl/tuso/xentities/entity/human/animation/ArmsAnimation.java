@@ -1,6 +1,8 @@
 package pl.tuso.xentities.entity.human.animation;
 
+import net.kyori.adventure.text.Component;
 import net.minecraft.core.Rotations;
+import org.bukkit.Bukkit;
 import pl.tuso.xentities.animation.AnimationManager;
 import pl.tuso.xentities.entity.human.Human;
 import pl.tuso.xentities.type.IntelligentArmorStand;
@@ -43,6 +45,7 @@ public class ArmsAnimation extends AnimationManager {
             }
             //LEFT ARM
             this.getArmorStand().setLeftArmPose(new Rotations((float) (lefttArmPose.getX() + x * -1), lefttArmPose.getY(), (float) (lefttArmPose.getZ() + y * -1)));
+            Bukkit.broadcast(Component.text(y));
         }
         count++;
     }

@@ -1,7 +1,7 @@
 package pl.tuso.xentities.entity.human;
 
+import net.kyori.adventure.text.Component;
 import net.minecraft.core.Rotations;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.Level;
@@ -31,7 +31,7 @@ public class Human extends Parent {
 
     public Human(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
         super(entitytypes, world);
-        this.setCustomName(Component.nullToEmpty("Human"));
+        this.getBukkitEntity().customName(Component.text("Human"));
         this.setInvisible(true);
         this.setItemSlot(EquipmentSlot.HEAD, HEAD.getNMSCopy());
         this.setItemSlot(EquipmentSlot.MAINHAND, RIGHT_ARM.getNMSCopy());

@@ -45,8 +45,6 @@ public class ExampleEntity extends Parent {
         part2.setDisplacementY(-0.5F);
         hitbox = new MainHitbox(this, world);
 
-        this.getAnimations().add(0, animation);
-
         Bukkit.broadcast(Component.text(this.getParts().toString()).color(TextColor.color(100, 209, 124)));
         Bukkit.broadcast(Component.text(this.getHitboxes().toString()).color(TextColor.color(189, 209, 62)));
 
@@ -56,7 +54,7 @@ public class ExampleEntity extends Parent {
         this.addHitboxes(world);
         this.initHitboxes();
 
-        //startAnimations();
+        animation.start();
     }
 
     @Override
@@ -67,7 +65,7 @@ public class ExampleEntity extends Parent {
 
     @Override
     public void animationTick() {
-        //animation.animate();
+        animation.animate();
     }
 
     @Override

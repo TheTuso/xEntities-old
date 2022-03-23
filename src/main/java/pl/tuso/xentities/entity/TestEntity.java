@@ -1,5 +1,6 @@
 package pl.tuso.xentities.entity;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -21,10 +22,10 @@ public class TestEntity extends Parent {
         this.setMovementSpeed(0.25D);
         this.setDisplacementZ(-0.5F);
         this.setInvisible(false);
-        this.getBukkitEntity().customName(net.kyori.adventure.text.Component.text("front").color(TextColor.color(234, 161, 70)));
+        this.getBukkitEntity().customName(Component.text("front").color(TextColor.color(234, 161, 70)));
 
         back = new Part(this, FantasticBeast.PART, world);
-        back.getBukkitEntity().customName(net.kyori.adventure.text.Component.text("back").color(TextColor.color(149, 234, 68)));
+        back.getBukkitEntity().customName(Component.text("back").color(TextColor.color(149, 234, 68)));
         back.setCustomNameVisible(true);
 
         this.spawnParts(world);
@@ -32,7 +33,7 @@ public class TestEntity extends Parent {
         preview = new ArmorStand(EntityType.ARMOR_STAND, world);
         preview.setMarker(true);
         preview.setSmall(true);
-        preview.getBukkitEntity().customName(net.kyori.adventure.text.Component.text("origin point").color(TextColor.color(234, 57, 73)));
+        preview.getBukkitEntity().customName(Component.text("origin point").color(TextColor.color(234, 57, 73)));
         preview.setCustomNameVisible(true);
         world.addFreshEntity(preview);
     }

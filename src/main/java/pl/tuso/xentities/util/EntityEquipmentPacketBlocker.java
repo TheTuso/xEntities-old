@@ -30,7 +30,7 @@ public class EntityEquipmentPacketBlocker {
             }
             @Override
             public void write(ChannelHandlerContext channelHandlerContext, Object packet, ChannelPromise channelPromise) throws Exception {
-                if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket){
+                if (packet instanceof ClientboundSetEquipmentPacket equipmentPacket){
                     if (equipmentPacket.getEntity() == ID) {
                         return;
                     }

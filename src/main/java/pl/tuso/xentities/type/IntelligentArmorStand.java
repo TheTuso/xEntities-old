@@ -1,10 +1,10 @@
 package pl.tuso.xentities.type;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.sounds.SoundEvent;
@@ -66,7 +66,7 @@ public class IntelligentArmorStand extends PathfinderMob implements Intelligent 
 
     public IntelligentArmorStand(EntityType<? extends IntelligentArmorStand> entitytypes, Level world) {
         super(entitytypes, world);
-        setCustomName(Component.nullToEmpty("IntelligentArmorStand"));
+        this.getBukkitEntity().customName(Component.text("IntelligentArmorStand"));
         setMovementSpeed(0.25D);
         setShowArms(true);
         setNoBasePlate(true);
